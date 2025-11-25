@@ -49,6 +49,8 @@ services:
       - "4096:4096"
     devices:
       - /dev/fuse:/dev/fuse
+    environment:
+      - TZ=Europe/Paris  # Set your timezone here
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /var/lib/zerobyte:/var/lib/zerobyte
@@ -85,6 +87,8 @@ services:
       - "4096:4096"
     devices:
       - /dev/fuse:/dev/fuse
+    environment:
+      - TZ=Europe/Paris
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /var/lib/zerobyte:/var/lib/zerobyte
@@ -151,6 +155,8 @@ Zerobyte can use [rclone](https://rclone.org/) to support 40+ cloud storage prov
          - "4096:4096"
        devices:
          - /dev/fuse:/dev/fuse
+       environment:
+         - TZ=Europe/Paris
        volumes:
          - /etc/localtime:/etc/localtime:ro
          - /var/lib/zerobyte:/var/lib/zerobyte
@@ -206,6 +212,8 @@ services:
       - "4096:4096"
     devices:
       - /dev/fuse:/dev/fuse
+    environment:
+      - TZ=Europe/Paris
     volumes:
       - /etc/localtime:/etc/localtime:ro
 -     - /var/lib/zerobyte:/var/lib/zerobyte
@@ -237,6 +245,8 @@ services:
       - "4096:4096"
     devices:
       - /dev/fuse:/dev/fuse
+    environment:
+      - TZ=Europe/Paris
     volumes:
       - /etc/localtime:/etc/localtime:ro
 -     - /var/lib/zerobyte:/var/lib/zerobyte
