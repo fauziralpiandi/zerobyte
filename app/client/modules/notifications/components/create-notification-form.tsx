@@ -73,7 +73,7 @@ const defaultValuesForType = {
 	telegram: {
 		type: "telegram" as const,
 		botToken: "",
-		chatId: ""
+		chatId: "",
 	},
 	custom: {
 		type: "custom" as const,
