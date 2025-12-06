@@ -795,7 +795,7 @@ const cleanupTemporaryKeys = async (config: RepositoryConfig, env: Record<string
 };
 
 const addCommonArgs = (args: string[], env: Record<string, string>) => {
-	args.push("--retry-lock", "1m", "--json");
+	args.push("--json");
 
 	if (env._SFTP_SSH_ARGS) {
 		args.push("-o", `sftp.args=${env._SFTP_SSH_ARGS}`);
