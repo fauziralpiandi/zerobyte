@@ -2,6 +2,7 @@ import crypto from "node:crypto";
 import fs from "node:fs/promises";
 import path from "node:path";
 import { RESTIC_PASS_FILE } from "../core/constants";
+import { isNodeJSErrnoException } from "./fs";
 
 const algorithm = "aes-256-gcm" as const;
 const keyLength = 32;
@@ -9,7 +10,6 @@ const encryptionPrefix = "encv1:";
 
 const envSecretPrefix = "env://";
 const fileSecretPrefix = "file://";
-const dockerSecretsBasePath = "/run/secrets";
 
 /**
  * Checks if a given string is encrypted by looking for the encryption prefix.
@@ -62,23 +62,19 @@ const resolveFileSecret = async (ref: string): Promise<string> => {
 		throw new Error("Invalid secret reference: secret name must be a single path segment");
 	}
 
-	// Docker secrets live on a Linux path. Use POSIX path semantics even when developing on Windows.
-	const resolvedPath = path.posix.resolve(dockerSecretsBasePath, normalizedName);
-	const allowedPrefix = dockerSecretsBasePath.endsWith("/") ? dockerSecretsBasePath : `${dockerSecretsBasePath}/`;
-	if (!resolvedPath.startsWith(allowedPrefix)) {
-		throw new Error("Invalid secret reference: path escapes secrets directory");
-	}
+	const resolvedPath = path.join("/run/secrets", normalizedName);
 
 	try {
 		const content = await fs.readFile(resolvedPath, "utf-8");
-		// Docker secrets commonly have a trailing newline.
 		return content.trimEnd();
 	} catch (error) {
-		if ((error as NodeJS.ErrnoException).code === "ENOENT") {
-			throw new Error(`Secret file not found: ${resolvedPath}`);
-		}
-		if ((error as NodeJS.ErrnoException).code === "EACCES") {
-			throw new Error(`Permission denied reading secret file: ${resolvedPath}`);
+		if (isNodeJSErrnoException(error)) {
+			if (error.code === "ENOENT") {
+				throw new Error(`Secret file not found: ${resolvedPath}`);
+			}
+			if (error.code === "EACCES") {
+				throw new Error(`Permission denied reading secret file: ${resolvedPath}`);
+			}
 		}
 		throw new Error(`Failed to read secret file ${resolvedPath}: ${(error as Error).message}`);
 	}

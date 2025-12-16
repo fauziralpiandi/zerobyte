@@ -12,11 +12,11 @@ services:
       - SYS_ADMIN
     environment:
       - NODE_ENV=development
-      # - SMB_PASSWORD=${SMB_PASSWORD}
+      # - SMB_PASSWORD=secret
     ports:
       - "4096:4096"
     # secrets:
-    #   - s3-secret-access-key
+    #   - smb-password
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /var/lib/zerobyte:/var/lib/zerobyte
@@ -47,5 +47,5 @@ services:
       - ~/.config/rclone:/root/.config/rclone
 
 # secrets:
-#   s3-secret-access-key:
-#     file: ./s3-secret-access-key.txt
+#   smb-password:
+#     file: ./smb-password.txt
