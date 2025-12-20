@@ -98,6 +98,10 @@ services:
 
 If you need remote mount capabilities, keep the original configuration with `cap_add: SYS_ADMIN` and `devices: /dev/fuse:/dev/fuse`.
 
+## Examples
+
+See [examples/README.md](examples/README.md) for runnable, copy/paste-friendly examples.
+
 ## Adding your first volume
 
 Zerobyte supports multiple volume backends including NFS, SMB, WebDAV, and local directories. A volume represents the source data you want to back up and monitor.
@@ -158,22 +162,27 @@ Zerobyte can use [rclone](https://rclone.org/) to support 40+ cloud storage prov
 **Setup instructions:**
 
 1. **Install rclone on your host system** (if not already installed):
+
    ```bash
    curl https://rclone.org/install.sh | sudo bash
    ```
 
 2. **Configure your cloud storage remote** using rclone's interactive config:
+
    ```bash
    rclone config
    ```
+
    Follow the prompts to set up your cloud storage provider. For OAuth providers (Google Drive, Dropbox, etc.), rclone will guide you through the authentication flow.
 
 3. **Verify your remote is configured**:
+
    ```bash
    rclone listremotes
    ```
 
 4. **Mount the rclone config into the Zerobyte container** by updating your `docker-compose.yml`:
+
    ```diff
    services:
      zerobyte:
@@ -195,6 +204,7 @@ Zerobyte can use [rclone](https://rclone.org/) to support 40+ cloud storage prov
    ```
 
 5. **Restart the Zerobyte container**:
+
    ```bash
    docker compose down
    docker compose up -d
@@ -212,6 +222,7 @@ For a complete list of supported providers, see the [rclone documentation](https
 Once you have added a volume and created a repository, you can create your first backup job. A backup job defines the schedule and parameters for backing up a specific volume to a designated repository.
 
 When creating a backup job, you can specify the following settings:
+
 - **Schedule**: Define how often the backup should run (e.g., daily, weekly)
 - **Retention Policy**: Set rules for how long backups should be retained (e.g., keep daily backups for 7 days, weekly backups for 4 weeks)
 - **Paths**: Specify which files or directories to include in the backup
